@@ -18,16 +18,16 @@ static mut ORIG_DIRECT_INPUT8_CREATE: FARPROC = None;
 pub extern "system" fn DirectInput8Create(
     hinst: HMODULE,
     dwVersion: u32,
-    riidltf: GUID,
+    riidltf: *const GUID,
     ppvOut: *mut *mut c_void,
     punkOuter: *const IUnknown,
 ) -> HRESULT {
     type DirectInput8CreateFunc = extern "system" fn(
-        hinst: HMODULE,
-        dwVersion: u32,
-        riidltf: GUID,
-        ppvOut: *mut *mut c_void,
-        punkOuter: *const IUnknown,
+        HMODULE,
+        u32,
+        *const GUID,
+        *mut *mut c_void,
+        *const IUnknown,
     ) -> HRESULT;
     let o_DirectInput8Create: DirectInput8CreateFunc = unsafe { transmute(ORIG_DIRECT_INPUT8_CREATE) };
 
