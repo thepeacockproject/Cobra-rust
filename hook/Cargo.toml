@@ -1,0 +1,29 @@
+[package]
+name = "cobra-hook"
+description = "A game hook for HITMAN™: Absolution to support skipping the launcher and changing the web service URL."
+license = "AGPL-3.0"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "dinput8"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+winres = "0.1.12"
+
+[dependencies.windows]
+version = "0.48"
+features = [
+    "Win32_Foundation",
+    "Win32_System_SystemServices",
+    "Win32_System_LibraryLoader",
+    "Win32_System_SystemInformation"
+]
+
+[package.metadata.winres]
+OriginalFilename = "cobra-hook.dll"
+ProductName = "Cobra Hook"
+ProductVersion = "0.1.0"
+FileDescription = "A game hook for HITMAN™: Absolution."
+LegalCopyright = "Copyright The Peacock Project © 2023+"
