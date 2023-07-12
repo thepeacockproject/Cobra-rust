@@ -35,18 +35,20 @@ pub extern "system" fn DirectInput8Create(
 }
 
 pub fn setup_dinput8() {
-    let sys_dir = unsafe {
-        let mut buf = [0u16; MAX_PATH as usize];
-        GetSystemDirectoryW(Some(&mut buf));
-        PCWSTR::from_raw(buf.as_ptr()).to_string().unwrap()
-    };
-    let dinput8_path = format!("{}\\dinput8.dll", sys_dir);
-    let dinput8_inst = unsafe { LoadLibraryW(&HSTRING::from(dinput8_path)) }.unwrap();
-
-    if dinput8_inst.is_invalid() {
-        // We can't properly place the hook, we cannot continue.
-        panic!("[COBRA//HOOK] Failed to load dinput8.dll!");
+    unsafe {
+        let sys_dir = {
+            let mut buf = [0u16; MAX_PATH as usize];
+            GetSystemDirectoryW(Some(&mut buf));
+            PCWSTR::from_raw(buf.as_ptr()).to_string().unwrap()
+        };
+        let dinput8_path = format!("{}\\dinput8.dll", sys_dir);
+        let dinput8_inst = LoadLibraryW(&HSTRING::from(dinput8_path)).unwrap();
+    
+        if dinput8_inst.is_invalid() {
+            // We can't properly place the hook, we cannot continue.
+            panic!("[COBRA//HOOK] Failed to load dinput8.dll!");
+        }
+        let dinput8_create = GetProcAddress(dinput8_inst, s!("DirectInput8Create"));
+        ORIG_DIRECT_INPUT8_CREATE = Some(dinput8_create.unwrap());
     }
-    let dinput8_create = unsafe { GetProcAddress(dinput8_inst, s!("DirectInput8Create")) };
-    unsafe { ORIG_DIRECT_INPUT8_CREATE = Some(dinput8_create.unwrap()) };
 }
