@@ -12,6 +12,15 @@ crate-type = ["cdylib"]
 [build-dependencies]
 winres = "0.1.12"
 
+[dependencies]
+toml = "0.7.6"
+
+[dependencies.serde]
+version = "1.0.171"
+features = [
+    "derive"
+]
+
 [dependencies.windows]
 version = "0.48"
 features = [
@@ -21,7 +30,8 @@ features = [
     "Win32_System_SystemInformation",
     "Win32_System_Diagnostics_Debug",
     "Win32_System_Console",
-    "Win32_System_Threading"
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging"
 ]
 
 [package.metadata.winres]
