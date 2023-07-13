@@ -1,6 +1,9 @@
 mod config;
 mod dinput8;
+mod glacier;
+mod absolution;
 
+use absolution::init_absolution;
 use dinput8::setup_dinput8;
 use config::{Config, ConfigError};
 
@@ -15,7 +18,7 @@ use windows::Win32::{
         Threading::GetCurrentProcessId,
     },
     UI::WindowsAndMessaging::{
-        MessageBoxA, MB_OK, MB_ICONERROR
+        MessageBoxA, MB_OK, MB_ICONERROR, MB_ICONINFORMATION
     }
 };
 use windows::{
@@ -65,8 +68,19 @@ pub extern "stdcall" fn DllMain(_inst_dll: HMODULE, reason: u32, _reserved: *con
 
         match timestamp {
             0x5047356A => println!("[COBRA//HOOK] HITMAN: Sniper Challenge (STEAM) found!"),
-            0x5149E0B4 => println!("[COBRA//HOOK] HITMAN: Absolution (STEAM) found!"),
-            _ => println!("[COBRA//HOOK] Unknown game version found."),
+            0x5149E0B4 => init_absolution(cfg),
+            _ => {
+                println!("[COBRA//HOOK] Unknown (or unable to find) game version.");
+
+                unsafe {
+                    MessageBoxA(
+                        None,
+                        s!("Cobra was unable to find the game version you are running. Cobra will not be started."),
+                        s!("Cobra - Game Version Error"),
+                        MB_OK | MB_ICONINFORMATION
+                    );
+                }
+            },
         }
 
         // TODO: Add hooks.
