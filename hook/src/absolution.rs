@@ -33,8 +33,6 @@ extern "cdecl" fn GetApplicationOptionBool(sName: *const ZString, bDefault: bool
 }
 
 extern "fastcall" fn ZWebServiceClientManagerCreate(instance: *mut c_void, arg1: *mut c_void, _baseUrl: *const c_char, callback: *mut c_void) -> *mut c_void {
-    println!("[COBRA//HOOK] ZWebServiceClientManagerCreate called.");
-    
     unsafe {
         let url = CString::new(WEBSERVICE_URL.as_str()).unwrap();
         match ZWEBSERVICE_CLIENT_MANAGER_CREATE {
