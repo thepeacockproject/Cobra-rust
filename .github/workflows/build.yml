@@ -1,0 +1,71 @@
+name: Build
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - v*
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+jobs:
+    lin-build:
+      name: Linux Build
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+
+          - name: Setup Rust
+            uses: moonrepo/setup-rust@v0
+            with:
+              channel: stable
+              profile: default
+
+          - name: Build
+            run: cargo build --release -p cobra-server
+
+          - name: Upload build artifact
+            uses: actions/upload-artifact@v3
+            with:
+                name: "cobra-server-linux"
+                path: |
+                  target/release/cobra-server
+
+    win-build:
+      name: Windows Build
+      runs-on: windows-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Setup Rust
+          uses: moonrepo/setup-rust@v0
+          with:
+            channel: stable
+            profile: default
+            targets: x86_64-pc-windows-msvc,i686-pc-windows-msvc
+
+        - name: Build
+          run: cargo build --release --target x86_64-pc-windows-msvc --target i686-pc-windows-msvc
+
+        - name: Prepare artifacts
+          run: |
+            cp target/x86_64-pc-windows-msvc/release/cobra-server.exe cobra-x64.exe 
+            cp target/i686-pc-windows-msvc/release/cobra-server.exe cobra-x86.exe 
+
+        - name: Upload hook artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: "cobra-hook"
+            path: |
+                target/i686-pc-windows-msvc/release/dinput8.dll
+
+        - name: Upload server artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: "cobra-server-win"
+            path: |
+                cobra-x64.exe
+                cobra-x86.exe
