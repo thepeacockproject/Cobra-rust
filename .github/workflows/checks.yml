@@ -26,12 +26,6 @@ jobs:
           - name: Check
             run: cargo check -p cobra-server
 
-          - name: Format
-            run: cargo fmt --all -- --check
-
-          - name: Clippy
-            run: cargo clippy -- -D warnings -p cobra-server
-
     win-checks:
       name: Windows Checks
       runs-on: windows-latest
@@ -48,6 +42,9 @@ jobs:
 
         - name: Check
           run: cargo check
+
+        - name: Format
+          run: cargo fmt --all -- --check
 
         - name: Clippy
           run: cargo clippy -- -D warnings
