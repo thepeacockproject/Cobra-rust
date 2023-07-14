@@ -1,3 +1,5 @@
+use super::sniper::patch_sniper;
+
 use std::{ffi::c_void, mem::transmute};
 use windows::{
     core::{IUnknown, GUID, HRESULT, HSTRING, PCWSTR},
@@ -25,6 +27,8 @@ pub unsafe extern "system" fn DirectInput8Create(
     type DirectInput8CreateFunc =
         extern "system" fn(HMODULE, u32, *const GUID, *mut *mut c_void, *const IUnknown) -> HRESULT;
     let o_DirectInput8Create: DirectInput8CreateFunc = transmute(ORIG_DIRECT_INPUT8_CREATE);
+
+    patch_sniper();
 
     return o_DirectInput8Create(hinst, dwVersion, riidltf, ppvOut, punkOuter);
 }

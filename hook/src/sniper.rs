@@ -20,6 +20,8 @@ static mut ZWEBSERVICE_CLIENT_MANAGER_CREATE: Option<
     GenericDetour<ZWebServiceClientManagerCreateFunc>,
 > = None;
 static mut WEBSERVICE_URL: String = String::new();
+static mut PATCHED: bool = false;
+static mut URL_PATCH_ENABLED: bool = false;
 
 unsafe extern "cdecl" fn GetApplicationOptionBool(sName: *const ZString, bDefault: bool) -> bool {
     if CStr::from_ptr(sName.as_ref().unwrap().m_chars)
@@ -53,8 +55,24 @@ unsafe extern "cdecl" fn ZWebServiceClientManagerCreate(
     }
 }
 
+pub unsafe fn patch_sniper() {
+    // Don't patch the memory if it isn't sniper or if we've already done it.
+    // Technically DirectInput8Create should only be called once, but just to be sure.
+    if PATCHED || !URL_PATCH_ENABLED {
+        return;
+    }
+
+    let url = CString::new(WEBSERVICE_URL.substring(0, 256)).unwrap();
+    strcpy(0x113D5E8 as *mut CChar, url.as_bytes().as_ptr());
+
+    PATCHED = true;
+}
+
 pub unsafe fn init_sniper(cfg: Config) {
     WEBSERVICE_URL = cfg.sniper.url;
+
+    // This is a horrible way of checking if this is sniper.
+    URL_PATCH_ENABLED = true;
 
     // FIXME: These hooks currently do not work.
     let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x004984C0 as usize);
@@ -94,7 +112,4 @@ pub unsafe fn init_sniper(cfg: Config) {
         }
         None => println!("[COBRA//HOOK] Failed to hook ZWebServiceClientManagerCreate."),
     }
-
-    let url = CString::new(WEBSERVICE_URL.substring(0, 256)).unwrap();
-    strcpy(0x113D5E8 as *mut CChar, url.as_bytes().as_ptr());
 }
