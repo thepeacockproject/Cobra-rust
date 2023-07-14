@@ -27,6 +27,7 @@ pub struct Hm5 {
 #[derive(Deserialize, Serialize)]
 pub struct Sniper {
     pub url: String,
+    pub skiplauncher: bool,
 }
 
 #[derive(Debug)]
@@ -51,15 +52,16 @@ impl Config {
                 },
                 sniper: Sniper {
                     url: String::from("http://localhost/sniper"),
+                    skiplauncher: false,
                 },
             };
-    
+
             match fs::write("./cobra.toml", toml::to_string_pretty(&config).unwrap()) {
                 Ok(_) => return Ok(config),
                 Err(_) => return Err(ConfigError::FileWrite),
             }
         }
-    
+
         match fs::read_to_string("./cobra.toml") {
             Ok(str) => {
                 let config: Result<Config, TomlDeserializeError> = toml::from_str(&str);

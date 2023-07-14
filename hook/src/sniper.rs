@@ -8,14 +8,12 @@ use std::{
     ffi::{c_char, c_void, CStr, CString},
     mem::transmute,
 };
+use substring::Substring;
+use tinyrlibc::{strcpy, CChar};
 
 type GetApplicationOptionBoolFunc = unsafe extern "cdecl" fn(*const ZString, bool) -> bool;
-type ZWebServiceClientManagerCreateFunc = unsafe extern "fastcall" fn(
-    *mut c_void,
-    *mut c_void,
-    *const c_char,
-    *mut c_void,
-) -> *mut c_void;
+type ZWebServiceClientManagerCreateFunc =
+    unsafe extern "cdecl" fn(*const c_char, *mut c_void) -> *mut c_void;
 
 static mut GET_APPLICATION_OPTION_BOOL: Option<GenericDetour<GetApplicationOptionBoolFunc>> = None;
 static mut ZWEBSERVICE_CLIENT_MANAGER_CREATE: Option<
@@ -41,15 +39,13 @@ unsafe extern "cdecl" fn GetApplicationOptionBool(sName: *const ZString, bDefaul
     }
 }
 
-unsafe extern "fastcall" fn ZWebServiceClientManagerCreate(
-    instance: *mut c_void,
-    arg1: *mut c_void,
+unsafe extern "cdecl" fn ZWebServiceClientManagerCreate(
     _baseUrl: *const c_char,
     callback: *mut c_void,
 ) -> *mut c_void {
     let url = CString::new(WEBSERVICE_URL.as_str()).unwrap();
     match ZWEBSERVICE_CLIENT_MANAGER_CREATE {
-        Some(ref mut hook) => hook.call(instance, arg1, url.as_ptr(), callback),
+        Some(ref mut hook) => hook.call(url.as_ptr(), callback),
         None => {
             println!("[COBRA//HOOK] Could not invoke ZWebServiceClientManagerCreate.");
             return 0 as *mut c_void;
@@ -57,12 +53,13 @@ unsafe extern "fastcall" fn ZWebServiceClientManagerCreate(
     }
 }
 
-pub unsafe fn init_absolution(cfg: Config) {
-    WEBSERVICE_URL = cfg.hm5.url;
+pub unsafe fn init_sniper(cfg: Config) {
+    WEBSERVICE_URL = cfg.sniper.url;
 
-    let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x00612930 as usize);
+    // FIXME: These hooks currently do not work.
+    let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x004984C0 as usize);
     let o_ZWebServiceClientManagerCreate: ZWebServiceClientManagerCreateFunc =
-        transmute(0x00BE22CF as usize);
+        transmute(0x00C043D1 as usize);
 
     GET_APPLICATION_OPTION_BOOL = Some(
         GenericDetour::<GetApplicationOptionBoolFunc>::new(
@@ -72,7 +69,7 @@ pub unsafe fn init_absolution(cfg: Config) {
         .unwrap(),
     );
 
-    if cfg.hm5.skiplauncher {
+    if cfg.sniper.skiplauncher {
         match GET_APPLICATION_OPTION_BOOL {
             Some(ref mut hook) => {
                 hook.enable().unwrap();
@@ -91,10 +88,13 @@ pub unsafe fn init_absolution(cfg: Config) {
     );
 
     match ZWEBSERVICE_CLIENT_MANAGER_CREATE {
-        Some(ref mut hook) => {
-            hook.enable().unwrap();
-            println!("[COBRA//HOOK] ZWebServiceClientManagerCreate hooked.");
+        Some(ref mut _hook) => {
+            //hook.enable().unwrap();
+            println!("[COBRA//HOOK] ZWebServiceClientManagerCreate not hooked (currently disabled in code).");
         }
         None => println!("[COBRA//HOOK] Failed to hook ZWebServiceClientManagerCreate."),
     }
+
+    let url = CString::new(WEBSERVICE_URL.substring(0, 256)).unwrap();
+    strcpy(0x113D5E8 as *mut CChar, url.as_bytes().as_ptr());
 }
