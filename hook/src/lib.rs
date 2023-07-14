@@ -23,6 +23,7 @@ use windows::Win32::{
 };
 use windows::{core::PCSTR, s};
 
+#[allow(clippy::missing_safety_doc)]
 #[no_mangle]
 pub unsafe extern "stdcall" fn DllMain(
     _inst_dll: HMODULE,
@@ -32,34 +33,31 @@ pub unsafe extern "stdcall" fn DllMain(
     if reason == DLL_PROCESS_ATTACH {
         setup_dinput8();
 
-        let cfg: Config;
-        match Config::load() {
-            Ok(config) => cfg = config,
+        let cfg: Config = match Config::load() {
+            Ok(config) => config,
             Err(err) => {
-                let message: PCSTR;
-
-                match err {
+                let message: PCSTR = match err {
                     ConfigError::FileWrite => {
-                        message = s!("Failed to write config file. Cobra will not be started.")
+                        s!("Failed to write config file. Cobra will not be started.")
                     }
                     ConfigError::FileRead => {
-                        message = s!("Failed to read config file. Cobra will not be started.")
+                        s!("Failed to read config file. Cobra will not be started.")
                     }
                     ConfigError::Parse => {
-                        message = s!("Failed to parse config file. Cobra will not be started.")
+                        s!("Failed to parse config file. Cobra will not be started.")
                     }
-                }
+                };
 
                 MessageBoxA(None, message, s!("Cobra - Error"), MB_OK | MB_ICONERROR);
 
                 return true.into();
             }
-        }
+        };
 
-        if cfg.options.console {
-            if !(AttachConsole(GetCurrentProcessId()).as_bool() || AllocConsole().as_bool()) {
-                panic!("[COBRA//HOOK] Unable to create console!");
-            }
+        if cfg.options.console
+            && !(AttachConsole(GetCurrentProcessId()).as_bool() || AllocConsole().as_bool())
+        {
+            panic!("[COBRA//HOOK] Unable to create console!");
         }
 
         let timestamp = GetTimestampForLoadedLibrary(GetModuleHandleA(None).unwrap());

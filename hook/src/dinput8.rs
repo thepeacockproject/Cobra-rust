@@ -30,7 +30,7 @@ pub unsafe extern "system" fn DirectInput8Create(
 
     patch_sniper();
 
-    return o_DirectInput8Create(hinst, dwVersion, riidltf, ppvOut, punkOuter);
+    o_DirectInput8Create(hinst, dwVersion, riidltf, ppvOut, punkOuter)
 }
 
 pub unsafe fn setup_dinput8() {

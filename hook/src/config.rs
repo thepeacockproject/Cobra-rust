@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
-use toml;
 
 type TomlDeserializeError = toml::de::Error;
 
@@ -66,11 +65,11 @@ impl Config {
             Ok(str) => {
                 let config: Result<Config, TomlDeserializeError> = toml::from_str(&str);
                 match config {
-                    Ok(config) => return Ok(config),
-                    Err(_) => return Err(ConfigError::Parse),
+                    Ok(config) => Ok(config),
+                    Err(_) => Err(ConfigError::Parse),
                 }
             }
-            Err(_) => return Err(ConfigError::FileRead),
+            Err(_) => Err(ConfigError::FileRead),
         }
     }
 }

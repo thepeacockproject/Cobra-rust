@@ -35,9 +35,9 @@ pub unsafe fn init_sniper(cfg: Config) {
     URL_PATCH_ENABLED = true;
 
     // FIXME: These hooks currently do not work.
-    let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x004984C0 as usize);
+    let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x004984C0_usize);
     let o_ZWebServiceClientManagerCreate: ZWebServiceClientManagerCreateFunc =
-        transmute(0x00C043D1 as usize);
+        transmute(0x00C043D1_usize);
 
     GET_APPLICATION_OPTION_BOOL = Some(
         GenericDetour::<GetApplicationOptionBoolFunc>::new(

@@ -40,7 +40,7 @@ pub unsafe extern "cdecl" fn GetApplicationOptionBool(
         Some(ref mut hook) => hook.call(sName, bDefault),
         None => {
             println!("[COBRA//HOOK] Could not invoke GetApplicationOptionBool.");
-            return true;
+            true
         }
     }
 }
@@ -56,7 +56,7 @@ pub unsafe extern "fastcall" fn ZWebServiceClientManagerCreate(
         Some(ref mut hook) => hook.call(instance, arg1, url.as_ptr(), callback),
         None => {
             println!("[COBRA//HOOK] Could not invoke ZWebServiceClientManagerCreate.");
-            return 0 as *mut c_void;
+            std::ptr::null_mut::<c_void>()
         }
     }
 }

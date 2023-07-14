@@ -13,9 +13,9 @@ use std::mem::transmute;
 pub unsafe fn init_absolution(cfg: Config) {
     WEBSERVICE_URL = cfg.hm5.url;
 
-    let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x00612930 as usize);
+    let o_GetApplicationOptionBool: GetApplicationOptionBoolFunc = transmute(0x00612930_usize);
     let o_ZWebServiceClientManagerCreate: ZWebServiceClientManagerCreateFunc =
-        transmute(0x00BE22CF as usize);
+        transmute(0x00BE22CF_usize);
 
     GET_APPLICATION_OPTION_BOOL = Some(
         GenericDetour::<GetApplicationOptionBoolFunc>::new(
