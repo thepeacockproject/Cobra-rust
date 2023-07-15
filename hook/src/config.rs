@@ -60,7 +60,7 @@ impl Config {
             return match fs::write("./cobra.toml", toml::to_string_pretty(&config).unwrap()) {
                 Ok(_) => Ok(config),
                 Err(_) => Err(ConfigError::FileWrite),
-            }
+            };
         }
 
         match fs::read_to_string("./cobra.toml") {
