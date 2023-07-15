@@ -1,35 +1,19 @@
 name: Checks
 
 on:
-    push:
-        branches:
-            - main
-        tags:
-            - v*
-    pull_request:
-        types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-    lin-checks:
-      name: Linux Checks
-      runs-on: ubuntu-latest
-      steps:
-          - name: Checkout
-            uses: actions/checkout@v3
-
-          - name: Setup Rust
-            uses: moonrepo/setup-rust@v0
-            with:
-              channel: stable
-              profile: default
-
-          - name: Check
-            run: cargo check -p cobra-server
-
-    win-checks:
-      name: Windows Checks
-      runs-on: windows-latest
-      steps:
+  lin-checks:
+    name: Linux Checks
+    runs-on: ubuntu-latest
+    steps:
         - name: Checkout
           uses: actions/checkout@v3
 
@@ -38,13 +22,29 @@ jobs:
           with:
             channel: stable
             profile: default
-            targets: x86_64-pc-windows-msvc,i686-pc-windows-msvc
 
         - name: Check
-          run: cargo check
+          run: cargo check -p cobra-server
 
-        - name: Format
-          run: cargo fmt --all -- --check
+  win-checks:
+    name: Windows Checks
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-        - name: Clippy
-          run: cargo clippy -- -D warnings
+      - name: Setup Rust
+        uses: moonrepo/setup-rust@v0
+        with:
+          channel: stable
+          profile: default
+          targets: x86_64-pc-windows-msvc,i686-pc-windows-msvc
+
+      - name: Check
+        run: cargo check
+
+      - name: Format
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy -- -D warnings
