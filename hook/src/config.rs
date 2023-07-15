@@ -17,12 +17,14 @@ pub struct Options {
     pub console: bool,
 }
 
+/// Hitman: Absolution options.
 #[derive(Deserialize, Serialize)]
 pub struct Hm5 {
     pub url: String,
     pub skiplauncher: bool,
 }
 
+/// Hitman: Sniper Challenge (2012) options.
 #[derive(Deserialize, Serialize)]
 pub struct Sniper {
     pub url: String,
