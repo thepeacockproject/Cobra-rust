@@ -57,9 +57,9 @@ impl Config {
                 },
             };
 
-            match fs::write("./cobra.toml", toml::to_string_pretty(&config).unwrap()) {
-                Ok(_) => return Ok(config),
-                Err(_) => return Err(ConfigError::FileWrite),
+            return match fs::write("./cobra.toml", toml::to_string_pretty(&config).unwrap()) {
+                Ok(_) => Ok(config),
+                Err(_) => Err(ConfigError::FileWrite),
             }
         }
 
