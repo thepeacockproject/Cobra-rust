@@ -54,6 +54,10 @@ pub unsafe extern "stdcall" fn DllMain(
             }
         };
 
+        if !cfg.options.enabled {
+            return true.into();
+        }
+
         if cfg.options.console
             && !(AttachConsole(GetCurrentProcessId()).as_bool() || AllocConsole().as_bool())
         {
