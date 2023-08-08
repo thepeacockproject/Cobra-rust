@@ -17,37 +17,13 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(Message::FromId)
-                            .big_unsigned()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Message::ToId)
-                            .big_unsigned()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Message::IsRead)
-                            .boolean()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Message::TemplateId)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Message::TemplateData)
-                            .text()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Message::Category)
-                            .integer()
-                            .not_null()
-                    )
-                    .to_owned()
+                    .col(ColumnDef::new(Message::FromId).big_unsigned().not_null())
+                    .col(ColumnDef::new(Message::ToId).big_unsigned().not_null())
+                    .col(ColumnDef::new(Message::IsRead).boolean().not_null())
+                    .col(ColumnDef::new(Message::TemplateId).integer().not_null())
+                    .col(ColumnDef::new(Message::TemplateData).text().not_null())
+                    .col(ColumnDef::new(Message::Category).integer().not_null())
+                    .to_owned(),
             )
             .await
     }
@@ -69,6 +45,5 @@ enum Message {
     IsRead,
     TemplateId,
     TemplateData,
-    Category
-
+    Category,
 }

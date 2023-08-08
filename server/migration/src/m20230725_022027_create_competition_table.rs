@@ -6,7 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .create_table(
                 Table::create()
@@ -16,27 +15,23 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Competition::Id)
                             .unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
                     .col(
                         ColumnDef::new(Competition::ContractId)
                             .unsigned()
-                            .not_null()
+                            .not_null(),
                     )
-                    .col(
-                        ColumnDef::new(Competition::EndTime)
-                            .timestamp()
-                            .not_null()
-                        )
+                    .col(ColumnDef::new(Competition::EndTime).timestamp().not_null())
                     .col(
                         ColumnDef::new(Competition::AllowInvites)
                             .boolean()
-                            .not_null()
+                            .not_null(),
                     )
                     .col(
                         ColumnDef::new(Competition::Creator)
                             .big_unsigned()
-                            .not_null()
+                            .not_null(),
                     )
                     .to_owned(),
             )
@@ -59,6 +54,5 @@ enum Competition {
     ContractId,
     EndTime,
     AllowInvites,
-    Creator
-    
+    Creator,
 }

@@ -11,7 +11,7 @@ pub struct Model {
     pub weapon: i32,
     pub outfit: i32,
     pub ammo: u8,
-    pub situation: u8
+    pub situation: u8,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

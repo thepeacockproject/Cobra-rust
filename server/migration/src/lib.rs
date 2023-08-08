@@ -18,7 +18,8 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(m20230725_022027_create_competition_table::Migration),
+        vec![
+            Box::new(m20230725_022027_create_competition_table::Migration),
             Box::new(m20230725_022027_create_competitionscore_table::Migration),
             Box::new(m20230725_022027_create_contract_table::Migration),
             Box::new(m20230725_022027_create_contractscore_table::Migration),
@@ -30,6 +31,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20230725_022027_create_storyscore_table::Migration),
             Box::new(m20230725_022027_create_target_table::Migration),
             Box::new(m20230725_022027_create_tutorialscore_table::Migration),
-            Box::new(m20230725_022027_create_user_table::Migration)]
+            Box::new(m20230725_022027_create_user_table::Migration),
+        ]
     }
 }

@@ -6,7 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .create_table(
                 Table::create()
@@ -16,24 +15,16 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(ContractScore::Id)
                             .unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
                     .col(
                         ColumnDef::new(ContractScore::SteamId)
                             .big_unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(ContractScore::Score)
-                            .integer()
-                            .not_null()
-                        )
-                    .col(
-                        ColumnDef::new(ContractScore::Rating)
-                            .integer()
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(ContractScore::Score).integer().not_null())
+                    .col(ColumnDef::new(ContractScore::Rating).integer().not_null())
                     .to_owned(),
             )
             .await
@@ -54,5 +45,5 @@ enum ContractScore {
     Id,
     SteamId,
     Score,
-    Rating
+    Rating,
 }

@@ -6,7 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .create_table(
                 Table::create()
@@ -16,38 +15,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(User::Id)
                             .big_unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(User::Wallet)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(User::ContractPlays)
-                            .integer()
-                            .not_null()
-                        )
-                    .col(
-                        ColumnDef::new(User::Trophies)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(User::CompetitionPlays)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(User::Country)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(User::DisplayName)
-                            .string_len(32)
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(User::Wallet).integer().not_null())
+                    .col(ColumnDef::new(User::ContractPlays).integer().not_null())
+                    .col(ColumnDef::new(User::Trophies).integer().not_null())
+                    .col(ColumnDef::new(User::CompetitionPlays).integer().not_null())
+                    .col(ColumnDef::new(User::Country).integer().not_null())
+                    .col(ColumnDef::new(User::DisplayName).string_len(32).not_null())
                     .to_owned(),
             )
             .await
@@ -71,5 +46,5 @@ enum User {
     Trophies,
     CompetitionPlays,
     Country,
-    DisplayName
+    DisplayName,
 }

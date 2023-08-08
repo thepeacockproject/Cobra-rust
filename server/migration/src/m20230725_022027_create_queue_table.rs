@@ -6,7 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .create_table(
                 Table::create()
@@ -22,25 +21,16 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Queue::Id)
                             .unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(Queue::IsCompetition)
-                            .boolean()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Queue::CreatedAt)
-                            .timestamp()
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(Queue::IsCompetition).boolean().not_null())
+                    .col(ColumnDef::new(Queue::CreatedAt).timestamp().not_null())
                     .to_owned(),
             )
             .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .drop_table(Table::drop().table(Queue::Table).to_owned())
             .await

@@ -6,30 +6,20 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .create_table(
                 Table::create()
                     .table(Play::Table)
                     .if_not_exists()
-                    .col(
-                        ColumnDef::new(Play::Id)
-                            .unsigned()
-                            .not_null()
-                            .primary_key()
-                    )
+                    .col(ColumnDef::new(Play::Id).unsigned().not_null().primary_key())
                     .col(
                         ColumnDef::new(Play::SteamId)
                             .big_unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(Play::PlayedAt)
-                            .timestamp()
-                            .not_null()
-                    )
-                    .to_owned()
+                    .col(ColumnDef::new(Play::PlayedAt).timestamp().not_null())
+                    .to_owned(),
             )
             .await
     }

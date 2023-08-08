@@ -76,7 +76,6 @@ impl Related<super::contract::Entity> for Entity {
     }
 }
 
-
 pub struct RatingLink;
 
 impl Linked for RatingLink {
@@ -87,7 +86,7 @@ impl Linked for RatingLink {
     fn link(&self) -> Vec<RelationDef> {
         vec![
             super::rating::Relation::User.def().rev(),
-            super::rating::Relation::Contract.def()
+            super::rating::Relation::Contract.def(),
         ]
     }
 }
@@ -96,13 +95,13 @@ pub struct PlayLink;
 
 impl Linked for PlayLink {
     type FromEntity = Entity;
-    
+
     type ToEntity = super::play::Entity;
 
     fn link(&self) -> Vec<RelationDef> {
         vec![
             super::play::Relation::User.def().rev(),
-            super::play::Relation::Contract.def()
+            super::play::Relation::Contract.def(),
         ]
     }
 }

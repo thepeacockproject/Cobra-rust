@@ -1,10 +1,8 @@
 struct Config {
-    url: &'static str
+    url: &'static str,
 }
 
-fn start(){
-    
-}
+fn start() {}
 fn main() {
     println!("Hello, world!");
 }

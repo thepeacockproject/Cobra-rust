@@ -6,7 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
         manager
             .create_table(
                 Table::create()
@@ -16,33 +15,13 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Target::Id)
                             .unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(Target::Name)
-                            .string_len(100)
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Target::Weapon)
-                            .integer()
-                            .not_null()
-                        )
-                    .col(
-                        ColumnDef::new(Target::Outfit)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Target::Ammo)
-                            .tiny_unsigned()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Target::Situation)
-                            .tiny_unsigned()
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(Target::Name).string_len(100).not_null())
+                    .col(ColumnDef::new(Target::Weapon).integer().not_null())
+                    .col(ColumnDef::new(Target::Outfit).integer().not_null())
+                    .col(ColumnDef::new(Target::Ammo).tiny_unsigned().not_null())
+                    .col(ColumnDef::new(Target::Situation).tiny_unsigned().not_null())
                     .to_owned(),
             )
             .await
@@ -65,5 +44,5 @@ enum Target {
     Weapon,
     Outfit,
     Ammo,
-    Situation
+    Situation,
 }

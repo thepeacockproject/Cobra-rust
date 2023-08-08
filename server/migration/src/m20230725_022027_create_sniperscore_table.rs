@@ -15,14 +15,10 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(SniperScore::SteamId)
                             .unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(SniperScore::Score)
-                            .integer()
-                            .not_null()
-                    )
-                    .to_owned()
+                    .col(ColumnDef::new(SniperScore::Score).integer().not_null())
+                    .to_owned(),
             )
             .await
     }
@@ -39,5 +35,5 @@ impl MigrationTrait for Migration {
 enum SniperScore {
     Table,
     SteamId,
-    Score
+    Score,
 }

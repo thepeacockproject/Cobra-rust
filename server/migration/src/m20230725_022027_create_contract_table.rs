@@ -16,75 +16,33 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Contract::Id)
                             .unsigned()
                             .not_null()
-                            .primary_key()
+                            .primary_key(),
                     )
                     .col(
                         ColumnDef::new(Contract::DisplayId)
                             .string_len(18)
-                            .not_null()
+                            .not_null(),
                     )
-                    .col(
-                        ColumnDef::new(Contract::Title)
-                            .string_len(30)
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(Contract::Title).string_len(30).not_null())
                     .col(
                         ColumnDef::new(Contract::Description)
                             .string_len(350)
-                            .not_null()
+                            .not_null(),
                     )
-                    .col(
-                        ColumnDef::new(Contract::SteamId)
-                            .big_unsigned()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::LevelIdx)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::CheckpointIdx)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::Difficulty)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::ExitId)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::WeaponToken)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::OutfitToken)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::Target1)
-                            .unsigned()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::Target2)
-                            .unsigned()
-                    )
-                    .col(
-                        ColumnDef::new(Contract::Target3)
-                            .unsigned()
-                    )
+                    .col(ColumnDef::new(Contract::SteamId).big_unsigned().not_null())
+                    .col(ColumnDef::new(Contract::LevelIdx).integer().not_null())
+                    .col(ColumnDef::new(Contract::CheckpointIdx).integer().not_null())
+                    .col(ColumnDef::new(Contract::Difficulty).integer().not_null())
+                    .col(ColumnDef::new(Contract::ExitId).integer().not_null())
+                    .col(ColumnDef::new(Contract::WeaponToken).integer().not_null())
+                    .col(ColumnDef::new(Contract::OutfitToken).integer().not_null())
+                    .col(ColumnDef::new(Contract::Target1).unsigned().not_null())
+                    .col(ColumnDef::new(Contract::Target2).unsigned())
+                    .col(ColumnDef::new(Contract::Target3).unsigned())
                     .col(
                         ColumnDef::new(Contract::Restrictions)
                             .tiny_unsigned()
-                            .not_null()
+                            .not_null(),
                     )
                     .to_owned(),
             )
@@ -116,5 +74,5 @@ enum Contract {
     Target1,
     Target2,
     Target3,
-    Restrictions
+    Restrictions,
 }
